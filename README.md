@@ -1,75 +1,72 @@
-# React + TypeScript + Vite
+# MAX Chat
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**Тестовое задание:** веб-приложение для обмена текстовыми сообщениями в мессенджере MAX через GREEN-API.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Задание
 
-## React Compiler
+**Что требовалось:**
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- Разработать пользовательский интерфейс для отправки и получения сообщений в MAX.
+- Использовать сервис [GREEN-API](https://green-api.com/max).
+- Реализовать **только текстовые** сообщения.
+- Взять за прототип внешний вид [веб-версии MAX](https://web.max.ru).
+- Интерфейс — простой, с минимальным набором функций.
+- Отправка — метод [SendMessage](https://green-api.com/v3/docs/api/sending/SendMessage/).
+- Получение — метод [receiveNotification](https://green-api.com/v3/docs/api/receiving/technology-http-api/) + HTTP API.
+- Технология — **React**.
 
-## Expanding the ESLint configuration
+**Ожидаемый результат:**
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- Пользователь вводит учётные данные из GREEN-API (`idInstance`, `apiTokenInstance`).
+- Пользователь вводит номер телефона получателя и создаёт новый чат.
+- Пользователь пишет текстовое сообщение и отправляет его.
+- Получатель отвечает в мессенджере MAX.
+- Пользователь видит ответ получателя в чате.
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+---
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## Стек
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+| Технология             | Назначение                     |
+| ---------------------- | ------------------------------ |
+| **React 19**           | UI-библиотека                  |
+| **TypeScript**         | Типизация                      |
+| **Vite**               | Сборка, dev-сервер, HMR        |
+| **CSS Modules**        | Изоляция стилей по компонентам |
+| **GREEN-API**          | REST API для работы с MAX      |
+| **@fontsource/roboto** | Шрифт Roboto                   |
+| **normalize.css**      | Сброс стилей браузера          |
 
+---
+
+## Установка и запуск
+
+```bash
+npm install
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://npmx.dev/package/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://npmx.dev/package/eslint-plugin-react-dom) for React-specific lint rules:
+Приложение откроется на `http://localhost:5173`.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+---
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## Как пользоваться
 
-```
+1. **Вход.** Введите `idInstance` и `apiTokenInstance` из личного кабинета [GREEN-API Console](https://console.green-api.com).
+2. **Создание чата.** Нажмите **«+»** в списке чатов, введите номер телефона получателя и (опционально) имя.
+3. **Отправка.** Откройте чат, введите текст и нажмите **«Отправить»** (или Enter).
+4. **Получение.** Входящие сообщения приходят автоматически (long-polling).
+5. **Выход.** Кнопка **«Выйти»** в шапке.
+
+## Используемые методы GREEN-API
+
+| Метод                 | Где                   | Зачем                               |
+| --------------------- | --------------------- | ----------------------------------- |
+| `getStateInstance`    | `Login`               | Проверка авторизации инстанса       |
+| `setSettings`         | `Login`               | Включение `incomingWebhook`         |
+| `checkAccount`        | `CreateChatModal`     | Резолв номера → внутренний `chatId` |
+| `sendMessage`         | `useChat`             | Отправка текста                     |
+| `receiveNotification` | `useIncomingMessages` | Получение входящих                  |
+| `deleteNotification`  | `useIncomingMessages` | Удаление обработанного уведомления  |
