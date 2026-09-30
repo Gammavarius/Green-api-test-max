@@ -1,0 +1,33 @@
+.chatWrapper {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+    width: 100%;
+}
+
+.panelWrapper {
+  flex: 1;
+  display: flex;
+  min-width: 0;
+}
+
+.chatPanelPlug {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-secondary);
+  font-size: 14px;
+}
+
+@media (max-width: 925px) {
+    .chatWrapper > *:nth-child(2) {
+        display: none;
+    }
+    .hasActiveChat > *:nth-child(1) {
+        display: none;
+    }
+    .hasActiveChat > *:nth-child(2) {
+        display: flex;
+    }
+}

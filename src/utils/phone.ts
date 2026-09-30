@@ -1,0 +1,1 @@
+export const normalizePhone = (raw: string) => raw.replace(/\D/g, '');
